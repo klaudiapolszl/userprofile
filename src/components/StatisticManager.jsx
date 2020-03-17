@@ -113,7 +113,7 @@ class StatisticManager extends React.Component {
 
     render() {
         const component = this.state.statistics.map( statistic => {
-            return (<div className="component">
+            return (<div className="component" key={ statistic.id }>
                 <div className="navy-section"></div>
                 <img className="component__user-img" alt="user" src={ statistic.user_img } />
                 <div className="statistics">

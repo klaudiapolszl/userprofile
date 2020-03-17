@@ -1,0 +1,85 @@
+@media (min-width: 600px){
+  //main component
+  .component{
+    width: 500px;
+    //main user image
+    .component__user-img{
+      top: 56px;
+      left: 37px;
+    }
+  }
+  //component with statisctics
+  .statistics{
+    left: 17px;
+    right: 17px;
+    min-height: 183px;
+    //follow button
+    .btn-style {
+      width: 134px;
+      margin-top: 0;
+    }
+    //user name
+    .statistics__user-name{
+      margin-left: -99px;
+    }
+    //user address
+    .user-address {
+      margin-left: 109px;
+      text-align: left;
+    }
+    //tooltip to copy the website address
+    .statistics__address{
+      left: 120px;
+      top: -56px;
+      padding: 5px;
+      font-size: 13px;
+      line-height: 16px;
+    }
+  }
+  //component with comments
+  .comments-component {
+    margin-top: 133px;
+    //text with event for showing and hiding comments
+    .comments-hide {
+      margin-left: 20px;
+    }
+    //separating line
+    .comment__line{
+      width: 444.2px;
+      margin-top: 25.5px;
+    }
+    //user name in the comments section
+    .comment__name{
+      margin-top: 40.5px;
+    }
+    //user photo in the comments section
+    .comment__date{
+      margin-top: 40.5px;
+    }
+    //date in the comments section
+    .comment__img {
+      margin-top: 30.5px;
+    }
+    //comment content
+    .comment__content{
+      margin-top: 6px;
+      overflow-wrap: break-word;
+    }
+  }
+  //section for adding a comment
+  .add-comment {
+    left: 17px;
+    width: 466px;
+    //input in the comment section
+    .add-comment__input{
+      width: 413px;
+    }
+    //button to send a comment
+    .add-comment__btn{
+      width: 50%;
+      margin-left: 25%;
+      height: 40px;
+      letter-spacing: 2px;
+    }
+  }
+}

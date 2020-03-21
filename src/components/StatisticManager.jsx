@@ -79,7 +79,7 @@ class StatisticManager extends React.Component {
 
             this.setState({
                 follow_btn_color: "#002C71",
-                follow_btn_click: this.state.follow_btn_click+1
+                follow_btn_click: this.state.follow_btn_click + 1
             });
         } else {
             let getFollowers = this.state.statistics.slice();

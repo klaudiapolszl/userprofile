@@ -5,9 +5,9 @@
       "user_img": "images/user.jpg",
       "name": "Harvey Specter",
       "address": "New York, USA",
-      "likes": 121,
+      "likes": 124,
       "following": 723,
-      "followers": 4436
+      "followers": 4450
     }
   ],
   "comments": [
@@ -59,6 +59,13 @@
       "name": "Mike Ross",
       "content": "Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula. ",
       "date": "2017-01-10T17:55:51.326Z"
+    },
+    {
+      "image": "images/user.jpg",
+      "name": "Mike Ross33",
+      "content": "nknpkinpikp",
+      "date": "Sat Mar 21 2020 18:19:57 GMT+0100 (czas środkowoeuropejski standardowy)",
+      "id": 8
     }
   ]
 }

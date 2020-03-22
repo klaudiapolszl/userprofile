@@ -1,12 +1,13 @@
 import React from 'react';
 import CommentsManager from './CommentsManager.jsx';
 import AddComment from './AddComment.jsx';
+import { connect } from "react-redux";
+import getStatistics, { addLike, subtractLike, addFollow, subtractFollow } from "../services/userServices.js";
 
 class StatisticManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            statistics: [],
             like_heart: 'none',
             unlike_heart: 'inline-block',
             follow_btn_color: "",
@@ -17,56 +18,33 @@ class StatisticManager extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`http://localhost:4000/statistics`)
-            .then( r => r.json() )
-            .then( ans => {
-                let response = this.state.statistics.slice();
-                response.push(...ans);
-                this.setState({
-                    statistics: response
-                });
-            });
+        this.props.getStatistics();
     }
 
-    handleHeartClick = () => {
+    handleHeartClick = (id) => {
         if(this.state.unlike_heart==="inline-block") {
-            let getLikes = this.state.statistics.slice();
-            getLikes[0].likes++;
-            fetch(`http://localhost:4000/statistics/${1}`,{
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(getLikes[0])
-            });
+            this.props.addLike(this.props.statistics, id);
             this.setState({
                 unlike_heart: 'none',
-                like_heart: 'inline-block',
-                statistics: getLikes
+                like_heart: 'inline-block'
             });
         } else {
-            let getLikes = this.state.statistics.slice();
-            getLikes[0].likes--;
-            fetch(`http://localhost:4000/statistics/${1}`,{
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(getLikes[0])
-            });
+            this.props.subtractLike(this.props.statistics, id);
             this.setState({
                 like_heart: 'none',
                 unlike_heart: 'inline-block',
-                statistics: getLikes
             });
         }
     };
 
-    handleFollowClick = () => {
+    handleFollowClick = (id) => {
         if(this.state.follow_btn_click === 0) {
-            let getFollowers = this.state.statistics.slice();
+            this.props.addFollow(this.props.statistics, id);
+            this.setState({
+                follow_btn_color: "#002C71",
+                follow_btn_click: this.state.follow_btn_click + 1
+            });
+            /*let getFollowers = this.props.statistics.slice();
             getFollowers[0].followers++;
             fetch(`http://localhost:4000/statistics/${1}`,{
                 method: 'PUT',
@@ -79,10 +57,16 @@ class StatisticManager extends React.Component {
 
             this.setState({
                 follow_btn_color: "#002C71",
-                follow_btn_click: this.state.follow_btn_click+1
-            });
+                follow_btn_click: this.state.follow_btn_click + 1
+            });*/
         } else {
-            let getFollowers = this.state.statistics.slice();
+            this.props.subtractFollow(this.props.statistics, id);
+            this.setState({
+                follow_btn_color: "#FFA640",
+                follow_btn_click: 0
+            });
+            /*
+            let getFollowers = this.props.statistics.slice();
             getFollowers[0].followers--;
             fetch(`http://localhost:4000/statistics/${1}`,{
                 method: 'PUT',
@@ -95,7 +79,7 @@ class StatisticManager extends React.Component {
             this.setState({
                 follow_btn_color: "#FFA640",
                 follow_btn_click: 0
-            });
+            });*/
         }
     };
 
@@ -112,7 +96,7 @@ class StatisticManager extends React.Component {
     };
 
     render() {
-        const component = this.state.statistics.map( statistic => {
+        const component = this.props.statistics.map( (statistic, index) => {
             return (<div className="component" key={ statistic.id }>
                 <div className="navy-section"></div>
                 <img className="component__user-img" alt="user" src={ statistic.user_img } />
@@ -124,8 +108,8 @@ class StatisticManager extends React.Component {
                     <h1 className="statistics__user-name">
                         { statistic.name }
                     </h1>
-                    <img src="images/heart.png" onClick={ this.handleHeartClick } className="statistics__heart-btn" alt="heart" style={ { display: this.state.unlike_heart } }/>
-                    <img src="images/heart-active.png" onClick={ this.handleHeartClick } className="statistics__heart-btn" alt="heart" style={{display: this.state.like_heart}} />
+                    <img src="images/heart.png" onClick={ () => this.handleHeartClick(index) } className="statistics__heart-btn" alt="heart" style={ { display: this.state.unlike_heart } }/>
+                    <img src="images/heart-active.png" onClick={ () => this.handleHeartClick(index) } className="statistics__heart-btn" alt="heart" style={{display: this.state.like_heart}} />
                     <h3 className="user-address">
                         { statistic.address }
                     </h3>
@@ -159,7 +143,7 @@ class StatisticManager extends React.Component {
                             </p>
                         </div>
                     </div>
-                    <button onClick={this.handleFollowClick} className="btn-style" style={ { background: this.state.follow_btn_color } }>
+                    <button onClick={ () => this.handleFollowClick(index) } className="btn-style" style={ { background: this.state.follow_btn_color } }>
                         Follow
                     </button>
                 </div>
@@ -173,4 +157,12 @@ class StatisticManager extends React.Component {
     }
 }
 
-export default StatisticManager;
+function mapStateToProps(state){
+    return {
+        statistics: state.statistics
+    }
+}
+export default connect(
+    mapStateToProps,
+    { getStatistics, addLike, subtractLike, addFollow, subtractFollow }
+)(StatisticManager);

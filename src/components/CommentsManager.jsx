@@ -1,10 +1,12 @@
 import React from 'react';
+import { connect } from "react-redux";
+import { getComments } from "../services/userServices.js";
+
 
 class CommentsManager extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            comments: [],
             show_comments: "comments-component",
             text_hide_comments: '',
             hide: 0
@@ -12,15 +14,7 @@ class CommentsManager extends React.Component {
     }
 
     componentDidMount(){
-        fetch(`http://localhost:4000/comments`)
-            .then( r => r.json() )
-            .then( ans => {
-                let response = this.state.comments.slice();
-                response.push(...ans);
-                this.setState({
-                    comments: response
-                });
-            });
+        this.props.getComments();
     }
 
     handleHideClick = () => {
@@ -38,7 +32,7 @@ class CommentsManager extends React.Component {
     };
 
     render() {
-        const list = this.state.comments
+        const list = this.props.comments
             .sort(function(obj1, obj2){
                 let data1 = new Date(obj1.date);
                 let data2 = new Date(obj2.date);
@@ -96,11 +90,19 @@ class CommentsManager extends React.Component {
         return(
             <div className={ this.state.show_comments }>
                 <p onClick={ this.handleHideClick } className="comments-hide">
-                    { (this.state.hide === 0) ? "Show comments (" + (this.state.comments.length - 3) + ")" : "Hide comments" }
+                    { (this.state.hide === 0) ? "Show comments (" + (this.props.comments.length - 3) + ")" : "Hide comments" }
                 </p>
                 { list_print }
             </div>
         )}
 }
 
-export default CommentsManager;
+function mapStateToProps(state){
+    return {
+        comments: state.comments
+    }
+}
+export default connect(
+    mapStateToProps,
+    { getComments }
+)(CommentsManager);

@@ -79,3 +79,34 @@ export function subtractFollow(statistics, id) {
             });
     }
 }
+export function getComments() {
+    return function(dispatch) {
+        return fetch(endpoints.comments)
+            .then( r => r.json() )
+            .then( json => {
+                dispatch({ type: 'SET_COMMENTS', comments: json })
+            });
+    }
+}
+export function addComment(comments, text) {
+
+    let now = new Date();
+    return function(dispatch) {
+        return fetch(endpoints.comments,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                image: "images/user.jpg",
+                name: "Mike Ross33",
+                content: text,
+                date: now.toString()
+            })
+        })
+        .then(() => {
+            dispatch({ type: 'SET_COMMENTS', comments: comments })
+        });
+    }
+}

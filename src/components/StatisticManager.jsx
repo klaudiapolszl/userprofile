@@ -44,42 +44,12 @@ class StatisticManager extends React.Component {
                 follow_btn_color: "#002C71",
                 follow_btn_click: this.state.follow_btn_click + 1
             });
-            /*let getFollowers = this.props.statistics.slice();
-            getFollowers[0].followers++;
-            fetch(`http://localhost:4000/statistics/${1}`,{
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(getFollowers[0])
-            });
-
-            this.setState({
-                follow_btn_color: "#002C71",
-                follow_btn_click: this.state.follow_btn_click + 1
-            });*/
         } else {
             this.props.subtractFollow(this.props.statistics, id);
             this.setState({
                 follow_btn_color: "#FFA640",
                 follow_btn_click: 0
             });
-            /*
-            let getFollowers = this.props.statistics.slice();
-            getFollowers[0].followers--;
-            fetch(`http://localhost:4000/statistics/${1}`,{
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(getFollowers[0])
-            });
-            this.setState({
-                follow_btn_color: "#FFA640",
-                follow_btn_click: 0
-            });*/
         }
     };
 

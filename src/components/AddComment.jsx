@@ -1,4 +1,6 @@
 import React from 'react';
+import {connect} from "react-redux";
+import {addComment} from "../services/userServices";
 
 class AddComment extends React.Component {
     constructor(props) {
@@ -23,6 +25,8 @@ class AddComment extends React.Component {
     };
 
     handleBtnCommentClick = () => {
+        this.props.addComments(this.props.comments, this.state.text);
+        /*
         let now = new Date();
         fetch('http://localhost:4000/comments', {
             method: 'POST',
@@ -37,11 +41,12 @@ class AddComment extends React.Component {
                 date: now.toString()
             })
         });
-
+ */
         this.setState({
             text: ""
         });
         window.location.reload();
+
     };
 
     render(){
@@ -55,4 +60,12 @@ class AddComment extends React.Component {
         )}
 }
 
-export default AddComment;
+function mapStateToProps(state){
+    return {
+        comments: state.comments
+    }
+}
+export default connect(
+    mapStateToProps,
+    { addComment }
+)(AddComment);

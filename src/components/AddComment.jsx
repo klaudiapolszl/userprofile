@@ -25,23 +25,7 @@ class AddComment extends React.Component {
     };
 
     handleBtnCommentClick = () => {
-        this.props.addComments(this.props.comments, this.state.text);
-        /*
-        let now = new Date();
-        fetch('http://localhost:4000/comments', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                image: "images/user.jpg",
-                name: "Mike Ross33",
-                content: this.state.text,
-                date: now.toString()
-            })
-        });
- */
+        this.props.addComment(this.props.comments, this.state.text);
         this.setState({
             text: ""
         });

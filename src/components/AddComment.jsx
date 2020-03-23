@@ -1,13 +1,13 @@
-import React from 'react';
-import {connect} from "react-redux";
-import {addComment} from "../services/userServices";
+import React from "react";
+import { connect } from "react-redux";
+import { addComment } from "../services/userServices";
 
 class AddComment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: 'Add a comment',
-            add_comment_btn_show: "none"
+            text: "Add a comment",
+            input_click: false
         }
     }
 
@@ -20,7 +20,7 @@ class AddComment extends React.Component {
     handleInputClick = () => {
         this.setState({
             text: "",
-            add_comment_btn_show: "block"
+            input_click: true
         });
     };
 
@@ -30,25 +30,29 @@ class AddComment extends React.Component {
             text: ""
         });
         window.location.reload();
-
     };
 
     render(){
         return(
             <div className="add-comment">
                 <input className="add-comment__input" type="text" value={ this.state.text } onChange={ this.handleInputChange } onClick={ this.handleInputClick } />
-                <button className="add-comment__btn btn-style" onClick={ this.handleBtnCommentClick } style={ { display: this.state.add_comment_btn_show } }>
-                    Add comment
-                </button>
+                { (this.state.input_click)
+                    ? <button className="add-comment__btn btn-style" onClick={ this.handleBtnCommentClick } >
+                        Add comment
+                      </button>
+                    : ""
+                }
             </div>
-        )}
+        )
+    }
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
         comments: state.comments
     }
 }
+
 export default connect(
     mapStateToProps,
     { addComment }

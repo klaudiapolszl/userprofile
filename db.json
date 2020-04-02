@@ -5,7 +5,7 @@
       "user_img": "images/user.jpg",
       "name": "Harvey Specter",
       "address": "New York, USA",
-      "likes": 124,
+      "likes": 140,
       "following": 723,
       "followers": 4450
     }
@@ -63,7 +63,7 @@
     {
       "image": "images/user.jpg",
       "name": "Mike Ross33",
-      "content": "nknpkinpikp",
+      "content": "Test comment",
       "date": "Sat Mar 21 2020 18:19:57 GMT+0100 (czas środkowoeuropejski standardowy)",
       "id": 8
     }

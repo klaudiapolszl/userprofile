@@ -144,6 +144,9 @@ body{
     @include wobble;
     background-color: $white;
   }
+  .statistics__address--hide{
+    display: none;
+  }
   //user name
   .statistics__user-name{
     margin-top: 38px;
@@ -204,12 +207,16 @@ body{
   }
   //heart as a button for likes
   .statistics__heart-btn{
+    display: inline-block;
     width: 15px;
     height: 13.7px;
     display: inline;
     margin-left: 13px;
     cursor: pointer;
   }
+}
+.statistics__hide-heart{
+  display: none;
 }
 //component that holds comments
 .comments-component{
@@ -336,6 +343,9 @@ body{
   &:focus{
     outline: none;
   }
+}
+.btn-style--active{
+  background-color: $navy-blue;
 }
 //section for adding a comment
 .add-comment{

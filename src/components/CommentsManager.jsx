@@ -1,44 +1,33 @@
-import React from 'react';
+import React from "react";
+import { connect } from "react-redux";
+import { getComments } from "../services/userServices.js";
 
 class CommentsManager extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            comments: [],
-            show_comments: "comments-component",
-            text_hide_comments: '',
-            hide: 0
+            hide_comments: true
         }
     }
 
     componentDidMount(){
-        fetch(`http://localhost:4000/comments`)
-            .then( r => r.json() )
-            .then( ans => {
-                let response = this.state.comments.slice();
-                response.push(...ans);
-                this.setState({
-                    comments: response
-                });
-            });
+        this.props.getComments();
     }
 
     handleHideClick = () => {
-        if (this.state.hide === 0) {
+        if (this.state.hide_comments) {
             this.setState({
-                show_comments: "comments-component show_comments",
-                hide: 1
+                hide_comments: false
             });
         } else{
             this.setState({
-                show_comments: "comments-component",
-                hide: 0
+                hide_comments: true
             });
         }
     };
 
     render() {
-        const list = this.state.comments
+        const list = this.props.comments
             .sort(function(obj1, obj2){
                 let data1 = new Date(obj1.date);
                 let data2 = new Date(obj2.date);
@@ -58,7 +47,7 @@ class CommentsManager extends React.Component {
                 if (now.getYear() === last.getYear()) {
                     if (now.getMonth() === last.getMonth()) {
                         if (now.getDate() === last.getDate()) {
-                            day = 'today';
+                            day = "today";
                         } else {
                             day = now.getDate() - last.getDate() + "D";
                         }
@@ -85,7 +74,7 @@ class CommentsManager extends React.Component {
             });
 
         let list_print=[];
-        if (this.state.hide === 0) {
+        if (this.state.hide_comments) {
             for (let i = 0; i < 3; i++) {
                 list_print[i] = list[i];
             }
@@ -94,13 +83,22 @@ class CommentsManager extends React.Component {
         }
 
         return(
-            <div className={ this.state.show_comments }>
+            <div className={ (this.state.hide_comments) ? "comments-component show_comments" : "comments-component" }>
                 <p onClick={ this.handleHideClick } className="comments-hide">
-                    { (this.state.hide === 0) ? "Show comments (" + (this.state.comments.length - 3) + ")" : "Hide comments" }
+                    { (this.state.hide_comments) ? "Show comments (" + (this.props.comments.length - 3) + ")" : "Hide comments" }
                 </p>
                 { list_print }
             </div>
         )}
 }
 
-export default CommentsManager;
+function mapStateToProps(state) {
+    return {
+        comments: state.comments
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    { getComments }
+)(CommentsManager);

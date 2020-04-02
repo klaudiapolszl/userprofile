@@ -1,6 +1,6 @@
-import React from 'react';
-import CommentsManager from './CommentsManager.jsx';
-import AddComment from './AddComment.jsx';
+import React from "react";
+import CommentsManager from "./CommentsManager.jsx";
+import AddComment from "./AddComment.jsx";
 import { connect } from "react-redux";
 import getStatistics, { addLike, subtractLike, addFollow, subtractFollow } from "../services/userServices.js";
 
@@ -8,12 +8,9 @@ class StatisticManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            like_heart: 'none',
-            unlike_heart: 'inline-block',
-            follow_btn_color: "",
-            follow_btn_click: 0,
-            share_address_toggle: "none",
-            location: window.location.href
+            like: false,
+            follow: false,
+            share_address_show: false,
         }
     }
 
@@ -22,75 +19,41 @@ class StatisticManager extends React.Component {
     }
 
     handleHeartClick = (id) => {
-        if(this.state.unlike_heart==="inline-block") {
-            this.props.addLike(this.props.statistics, id);
-            this.setState({
-                unlike_heart: 'none',
-                like_heart: 'inline-block'
-            });
-        } else {
+        if(this.state.like) {
             this.props.subtractLike(this.props.statistics, id);
             this.setState({
-                like_heart: 'none',
-                unlike_heart: 'inline-block',
+                like: false
+            });
+        } else {
+            this.props.addLike(this.props.statistics, id);
+            this.setState({
+                like: true
             });
         }
     };
 
     handleFollowClick = (id) => {
-        if(this.state.follow_btn_click === 0) {
-            this.props.addFollow(this.props.statistics, id);
-            this.setState({
-                follow_btn_color: "#002C71",
-                follow_btn_click: this.state.follow_btn_click + 1
-            });
-            /*let getFollowers = this.props.statistics.slice();
-            getFollowers[0].followers++;
-            fetch(`http://localhost:4000/statistics/${1}`,{
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(getFollowers[0])
-            });
-
-            this.setState({
-                follow_btn_color: "#002C71",
-                follow_btn_click: this.state.follow_btn_click + 1
-            });*/
-        } else {
+        if(this.state.follow) {
             this.props.subtractFollow(this.props.statistics, id);
             this.setState({
-                follow_btn_color: "#FFA640",
-                follow_btn_click: 0
+                follow: false
             });
-            /*
-            let getFollowers = this.props.statistics.slice();
-            getFollowers[0].followers--;
-            fetch(`http://localhost:4000/statistics/${1}`,{
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(getFollowers[0])
-            });
+        } else {
+            this.props.addFollow(this.props.statistics, id);
             this.setState({
-                follow_btn_color: "#FFA640",
-                follow_btn_click: 0
-            });*/
+                follow: true
+            });
         }
     };
 
     handleShareClick = () => {
-        if(this.state.share_address_toggle === "none"){
+        if(this.state.share_address_show){
             this.setState({
-                share_address_toggle: "block"
+                share_address_show: false
             });
         }else{
             this.setState({
-                share_address_toggle: "none"
+                share_address_show: true
             });
         }
     };
@@ -102,14 +65,14 @@ class StatisticManager extends React.Component {
                 <img className="component__user-img" alt="user" src={ statistic.user_img } />
                 <div className="statistics">
                     <img onClick={ this.handleShareClick } className="statistics__share-btn" alt="share" src="/images/share.png" />
-                    <div className="statistics__address" style={ { display: this.state.share_address_toggle } }>
-                        Copy this address: { this.state.location }
+                    <div className={ (this.state.share_address_show) ? "statistics__address" : "statistics__address statistics__address--hide" }>
+                        Copy this address: { window.location.href }
                     </div>
                     <h1 className="statistics__user-name">
                         { statistic.name }
                     </h1>
-                    <img src="images/heart.png" onClick={ () => this.handleHeartClick(index) } className="statistics__heart-btn" alt="heart" style={ { display: this.state.unlike_heart } }/>
-                    <img src="images/heart-active.png" onClick={ () => this.handleHeartClick(index) } className="statistics__heart-btn" alt="heart" style={{display: this.state.like_heart}} />
+                    <img src="images/heart.png" onClick={ () => this.handleHeartClick(index) } className={ (this.state.like) ? "statistics__hide-heart" : "statistics__heart-btn" } alt="heart" />
+                    <img src="images/heart-active.png" onClick={ () => this.handleHeartClick(index) } className={ (this.state.like) ? "statistics__heart-btn" : "statistics__hide-heart" } alt="heart" />
                     <h3 className="user-address">
                         { statistic.address }
                     </h3>
@@ -143,7 +106,7 @@ class StatisticManager extends React.Component {
                             </p>
                         </div>
                     </div>
-                    <button onClick={ () => this.handleFollowClick(index) } className="btn-style" style={ { background: this.state.follow_btn_color } }>
+                    <button onClick={ () => this.handleFollowClick(index) } className={ (this.state.follow) ? "btn-style btn-style--active" : "btn-style" } >
                         Follow
                     </button>
                 </div>
@@ -157,11 +120,12 @@ class StatisticManager extends React.Component {
     }
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
         statistics: state.statistics
     }
 }
+
 export default connect(
     mapStateToProps,
     { getStatistics, addLike, subtractLike, addFollow, subtractFollow }

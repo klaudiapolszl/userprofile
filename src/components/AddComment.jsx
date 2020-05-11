@@ -25,11 +25,15 @@ class AddComment extends React.Component {
     };
 
     handleBtnCommentClick = () => {
-        this.props.addComment(this.props.comments, this.state.text);
-        this.setState({
-            text: ""
-        });
-        window.location.reload();
+        if(this.state.text.length > 0){
+            this.props.addComment(this.props.comments, this.state.text);
+            this.setState({
+                text: ""
+            });
+            window.location.reload();
+        } else {
+            alert("To add a comment enter the content");
+        }
     };
 
     render(){
